@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Bilipad Account Manager{% endblock %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>System Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6 class="text-muted">Referral Code</h6>
+                    <div class="d-flex align-items-center">
+                        <input type="text" class="form-control" value="{{ referral_code }}" id="referralCode" readonly>
+                        <button class="btn btn-sm btn-outline-primary ms-2" onclick="copyToClipboard('referralCode')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-muted">Total Accounts</h6>
+                    <h3>{{ account_count }}</h3>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-muted">Total Proxies</h6>
+                    <h3>{{ proxy_count }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('start_account_creation_route') }}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-2"></i>Start Account Creation
+                    </a>
+                    <a href="{{ url_for('view_accounts') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-users me-2"></i>View All Accounts
+                    </a>
+                    <a href="{{ url_for('view_proxies') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-network-wired me-2"></i>Manage Proxies
+                    </a>
+                    <a href="{{ url_for('export_accounts') }}" class="btn btn-outline-success">
+                        <i class="fas fa-file-export me-2"></i>Export Accounts
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Account Creation Status</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Failed</th>
+                                <th>Total</th>
+                                <th>Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    {% if account_creation_status.running %}
+                                        <span class="badge bg-success">Running</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Stopped</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ account_creation_status.created }}</td>
+                                <td>{{ account_creation_status.failed }}</td>
+                                <td>{{ account_creation_status.total }}</td>
+                                <td>{{ account_creation_status.last_updated }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="row">
+    <div class="col-md-8 offset-md-2 text-center">
+        <h1 class="display-4 mb-4">Welcome to Bilipad Account Manager</h1>
+        <p class="lead mb-4">Create and manage your Bilipad accounts efficiently with our automated tools.</p>
+        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4 gap-3">
+                <i class="fas fa-user-plus me-2"></i>Register Now
+            </a>
+            <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg px-4">
+                <i class="fas fa-sign-in-alt me-2"></i>Login
+            </a>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function copyToClipboard(elementId) {
+        const element = document.getElementById(elementId);
+        element.select();
+        document.execCommand('copy');
+        
+        // Show a temporary tooltip
+        const button = element.nextElementSibling;
+        const originalHtml = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-check"></i>';
+        
+        setTimeout(() => {
+            button.innerHTML = originalHtml;
+        }, 2000);
+    }
+</script>
+{% endblock %} 

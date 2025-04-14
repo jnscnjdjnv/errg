@@ -1,0 +1,14 @@
+<<<<<<< HEAD
+flask==2.0.1
+flask-sqlalchemy==2.5.1
+flask-login==0.5.0
+werkzeug==2.0.1
+requests==2.26.0
+web3==5.24.0
+eth-account==0.5.7 
+=======
+requests==2.31.0
+eth-account==0.10.0
+web3==6.15.1
+colorama==0.4.6 
+>>>>>>> e7354fb9863b184dadd86cf14240a7ae60918c0e

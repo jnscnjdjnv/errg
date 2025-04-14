@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Account Creation Status - Bilipad Account Manager{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Account Creation Status</h5>
+                {% if status.running %}
+                <form method="post" action="{{ url_for('stop_account_creation_route') }}">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        <i class="fas fa-stop me-1"></i>Stop Creation
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Failed</th>
+                                <th>Total</th>
+                                <th>Current Account</th>
+                                <th>Message</th>
+                                <th>Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    {% if status.running %}
+                                        <span class="badge bg-success">Running</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Stopped</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ status.created }}</td>
+                                <td>{{ status.failed }}</td>
+                                <td>{{ status.total }}</td>
+                                <td>{{ status.current_account }}</td>
+                                <td>{{ status.message }}</td>
+                                <td>{{ status.last_updated }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="{{ url_for('view_accounts') }}" class="btn btn-primary">
+                <i class="fas fa-users me-2"></i>View All Accounts
+            </a>
+            <a href="{{ url_for('start_account_creation_route') }}" class="btn btn-outline-primary">
+                <i class="fas fa-plus-circle me-2"></i>Create More Accounts
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function refreshStatus() {
+        fetch('{{ url_for("api_account_status") }}')
+            .then(response => response.json())
+            .then(data => {
+                // Update status
+                const statusBadge = document.querySelector('td:first-child .badge');
+                if (data.running) {
+                    statusBadge.className = 'badge bg-success';
+                    statusBadge.textContent = 'Running';
+                } else {
+                    statusBadge.className = 'badge bg-secondary';
+                    statusBadge.textContent = 'Stopped';
+                }
+                
+                // Update other fields
+                document.querySelector('td:nth-child(2)').textContent = data.created;
+                document.querySelector('td:nth-child(3)').textContent = data.failed;
+                document.querySelector('td:nth-child(4)').textContent = data.total;
+                document.querySelector('td:nth-child(5)').textContent = data.current_account;
+                document.querySelector('td:nth-child(6)').textContent = data.message;
+                document.querySelector('td:nth-child(7)').textContent = data.last_updated;
+                
+                // If still running, schedule next update
+                if (data.running) {
+                    setTimeout(refreshStatus, 1000);
+                } else {
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+    
+    // Start refreshing status if running
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.querySelector('td:first-child .badge').textContent.trim() === 'Running') {
+            setTimeout(refreshStatus, 1000);
+        }
+    });
+</script>
+{% endblock %} 

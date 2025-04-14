@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Add Proxy - Bilipad Account Manager{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-plus me-2"></i>Add Proxy</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{{ url_for('add_proxy') }}">
+                    <div class="mb-3">
+                        <label for="proxy" class="form-label">Proxy URL</label>
+                        <input type="text" class="form-control" id="proxy" name="proxy" placeholder="http://username:password@host:port" required>
+                        <div class="form-text">Format: http://username:password@host:port or http://host:port</div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Save Proxy
+                        </button>
+                        <a href="{{ url_for('view_proxies') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Start Account Creation - Bilipad Account Manager{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-user-plus me-2"></i>Start Account Creation</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{{ url_for('start_account_creation_route') }}">
+                    <div class="mb-3">
+                        <label for="count" class="form-label">Number of Accounts to Create</label>
+                        <input type="number" class="form-control" id="count" name="count" min="1" max="100" value="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="use_proxies" name="use_proxies" checked>
+                            <label class="form-check-label" for="use_proxies">
+                                Use Proxies ({{ proxy_count }} available)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="complete_tasks" name="complete_tasks" checked>
+                            <label class="form-check-label" for="complete_tasks">
+                                Complete Tasks Automatically
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="set_withdrawal" name="set_withdrawal" checked>
+                            <label class="form-check-label" for="set_withdrawal">
+                                Set Withdrawal Address
+                            </label>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-play me-2"></i>Start Creation
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
